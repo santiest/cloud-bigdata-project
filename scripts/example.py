@@ -2,6 +2,7 @@
 import sys
 sys.path.insert(0,'..')
 from env_wrapper import EnvVariables
+from schema import DatasetSchema
 
 from pyspark.sql.functions import col
 from pyspark.sql import SparkSession
@@ -14,7 +15,7 @@ spark = (SparkSession.builder.master("local[4]")
             .appName("GetMostVisitedAirportsEXAMPLE")
             .getOrCreate())
 
-df = spark.read.option("header",True).csv(env.getFileName())
+df = spark.read.option("header",True).schema(DatasetSchema().schema).csv(env.getFileName())
 
 # Average values
 result_df = df.groupBy(col("destinationAirport")).count()
