@@ -20,6 +20,6 @@ df = spark.read.option("header",True).csv(env.getFileName())
 result_df = df.groupBy(col("flightDate")).count()
 
 # Write to file
-result_df.sort("flightDate").write.option("header",True).csv("output")
+result_df.sort("flightDate").write.option("header",True).csv("GetDaysMoreFlights")
 
 # spark-submit DaysMoreFlights.py
