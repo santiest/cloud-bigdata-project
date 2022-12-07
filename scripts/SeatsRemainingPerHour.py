@@ -34,5 +34,4 @@ result_df3 = result_df3.select('hour', floor("avg(seatsRemaining)").alias('media
 # Ordeno los datos y los escribo en un fichero
 result_df3.sort(result_df3.media.desc()).write.option("header",True).csv("output")
 
-# spark-submit example.py
-
+# spark-submit SeatsRemainingPerHour.py
