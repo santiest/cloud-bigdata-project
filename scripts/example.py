@@ -27,5 +27,5 @@ result_df = df.groupBy(col("destinationAirport")).count()
 # Write to file
 result_df.sort("count").write.option("header",True).mode("overwrite").csv(env.getOutputDir() + spark.sparkContext.appName)
 
-# spark-submit example.py
+# spark-submit --py-files ../env_wrapper.py,../schema.py example.py
 
