@@ -10,7 +10,7 @@ from pyspark import SparkFiles
 
 
 # Build pyspark
-spark = (SparkSession.builder.master("local[4]")
+spark = (SparkSession.builder.master("local[*]")
             .appName("GetMostVisitedAirportsEXAMPLE")
             .getOrCreate())
 spark.sparkContext.addPyFile(SparkFiles.get("env_wrapper.py"))
@@ -25,7 +25,7 @@ df = spark.read.option("header",True).schema(DatasetSchema().schema).csv(env.get
 result_df = df.groupBy(col("destinationAirport")).count()
 
 # Write to file
-result_df.sort("count").write.option("header",True).csv("output")
+result_df.sort("count").write.option("header",True).mode("overwrite").csv(env.getOutputDir() + spark.sparkContext.appName)
 
 # spark-submit example.py
 
