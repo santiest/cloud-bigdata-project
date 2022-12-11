@@ -25,4 +25,4 @@ result_df1 = result_df.groupBy('destinationAirport').count()
 # Ordeno los datos y los escribo en un fichero
 result_df1.sort(col('count').desc()).write.option("header",True).csv("PopularCities")
 
-# spark-submit FlightsPerMonth.py
+# spark-submit PopularCities.py
