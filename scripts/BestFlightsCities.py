@@ -4,7 +4,7 @@ sys.path.insert(0,'..')
 from env_wrapper import EnvVariables
 from schema import DatasetSchema
 
-from pyspark.sql.functions import col, bround, ceil
+from pyspark.sql.functions import col, min
 from pyspark.sql import SparkSession
 from pyspark import SparkFiles
 
@@ -21,10 +21,14 @@ print("\n\n\n\n", env.getFileName(), "\n\n\n\n")
 
 df = spark.read.option("header",True).schema(DatasetSchema().schema).csv(env.getFileName())
 
-# Average values
-result_df = df.withColumn("totalFare", col("totalFare").cast("float")).groupBy("startingAirport","destinationAirport").min("totalFare")
+# Preparation of the data
+result_df = df.withColumn("totalFare", col("totalFare").cast("float"))
+
+# Groupiing of the data and minimun price
+result_df = result_df.groupBy("startingAirport","destinationAirport").agg(min("totalFare"))
 
 # Write to file
 result_df.sort("startingAirport").write.option("header",True).mode("overwrite").csv(env.getOutputDir() + spark.sparkContext.appName)
 
-# spark-submit BestFlightsCities.py
+# spark-submit BestFlightsCities.py for cloud
+# spark-submit --py-files ../env_wrapper.py,../schema.py BestFlightsCities.py in local console
