@@ -1,20 +1,26 @@
 # Este programa calcula el numero de vuelos de cada aerolinea para un destino y origen pedido por cada mes. 
 
+
 import sys
 sys.path.insert(0,'..')
 from env_wrapper import EnvVariables
 from schema import DatasetSchema
+from pyspark import SparkFiles
 
 from pyspark.sql.functions import col, split, floor
 from pyspark.sql import SparkSession
 
+# Build pyspark
+spark = (SparkSession.builder.master("local[*]")
+            .appName("FlightsPerMonth")
+            .getOrCreate())
+
+spark.sparkContext.addPyFile(SparkFiles.get("env_wrapper.py"))
+spark.sparkContext.addPyFile(SparkFiles.get("schema.py"))
+
 env = EnvVariables()
 print("\n\n\n\n", env.getFileName(), "\n\n\n\n")
 
-# Build pyspark
-spark = (SparkSession.builder.master("local[4]")
-            .appName("FlightsPerMonth")
-            .getOrCreate())
 
 df = spark.read.option("header",True).schema(DatasetSchema().schema).csv(env.getFileName())
 
@@ -32,6 +38,6 @@ result_df1 = result_df1.withColumn('Month', split('flightDate', '-').getItem(1))
 result_df2 = result_df1.groupBy('Month', 'Airline').count()
 
 # Ordeno los datos y los escribo en un fichero
-result_df2.sort('Airline', 'Month').write.option("header",True).csv("FlightsPerMonth")
+result_df2.sort('Airline', 'Month').write.option("header",True).mode("overwrite").csv(env.getOutputDir() + spark.sparkContext.appName)
 
 # spark-submit FlightsPerMonth.py
