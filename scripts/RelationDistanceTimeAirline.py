@@ -30,6 +30,6 @@ result_df2 = result_df2.groupBy("Airline").avg("travelDurationSplit")
 result_df = result_df1.join(result_df2, ["Airline"])
 result_df = result_df.filter(col("avg(totalTravelDistance)")!= "0")
 # Write to file
-result_df.write.option("header",True).csv("RelationDistanceTimeAirline").mode("overwrite").csv(env.getOutputDir() + spark.sparkContext.appName)
+result_df.write.option("header",True).mode("overwrite").csv(env.getOutputDir() + spark.sparkContext.appName)
 
 # spark-submit RelationDistanceTimeAirline.py
