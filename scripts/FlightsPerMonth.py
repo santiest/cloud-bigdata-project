@@ -40,4 +40,4 @@ result_df2 = result_df1.groupBy('Month', 'Airline').count()
 # Ordeno los datos y los escribo en un fichero
 result_df2.sort('Airline', 'Month').write.option("header",True).mode("overwrite").csv(env.getOutputDir() + spark.sparkContext.appName)
 
-# spark-submit FlightsPerMonth.py
+# spark-submit FlightsPerMonth.py origen destino
