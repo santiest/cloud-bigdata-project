@@ -1,0 +1,5 @@
+startingAirport,destinationAirport,isNonStop,Avg_Price
+SFO,ORD,false,418.44
+SFO,ORD,true,423.29
+SFO,PHL,true,458.76
+SFO,PHL,false,509.72
