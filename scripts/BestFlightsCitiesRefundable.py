@@ -23,9 +23,10 @@ df = spark.read.option("header",True).schema(DatasetSchema().schema).csv(env.get
 
 # Average values
 result_df = df.filter(df.isRefundable == "True")
-result_df = df.withColumn("totalFare", col("totalFare").cast("float")).groupBy("startingAirport","destinationAirport").min("totalFare")
+result_df = result_df.withColumn("totalFare", col("totalFare").cast("float")).groupBy("startingAirport","destinationAirport").min("totalFare")
 
 # Write to file
 result_df.sort("startingAirport").write.option("header",True).mode("overwrite").csv(env.getOutputDir() + spark.sparkContext.appName)
 
 # spark-submit BestFlightsCitiesRefundable.py
+# spark-submit --py-files ../env_wrapper.py,../schema.py BestFlightsCitiesRefundable.py
