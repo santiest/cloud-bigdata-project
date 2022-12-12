@@ -1,0 +1,3 @@
+startingAirport,destinationAirport,min(totalFare)
+MIA,EWR,3406.43
+MIA,JFK,3418.25

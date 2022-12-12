@@ -1,0 +1,3 @@
+startingAirport,destinationAirport,min(totalFare)
+ORD,DEN,247.41
+SFO,DEN,418.0
